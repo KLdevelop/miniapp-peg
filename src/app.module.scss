@@ -1,0 +1,21 @@
+@use '/src/assets/fonts/Roboto';
+
+:global(#app) {
+  font-family: 'Roboto';
+  font-size: 16px;
+  // display: grid;
+  // justify-content: center;
+  // display: flex;
+  // width: 100vw;
+  // height: 100vh;
+  // justify-content: center;
+  // align-content: center;
+  // align-items: center;
+  color: rgb(60, 60, 60);
+}
+
+*:not(button) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
