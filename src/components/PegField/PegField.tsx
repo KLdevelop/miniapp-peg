@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './PegField.module.scss';
+import { copyToMutableArray } from 'src/utils';
 
 interface Cell {
   i: number;
@@ -7,22 +8,15 @@ interface Cell {
 }
 
 interface Props {
-  initialCells: readonly (readonly boolean[])[];
-  voidCells: readonly string[];
+  initialCells: InitialCells;
+  voidCells: VoidCells;
   restartTrigger?: boolean;
 }
 
 export const PegField = (props: Props) => {
   const [curCell, setCurCell] = useState<null | Cell>(null);
   const { initialCells, voidCells, restartTrigger } = props;
-  const [cells, setCells] = useState<boolean[][]>([
-    ...structuredClone(initialCells.map((cellsLine) => cellsLine.map((cell) => cell))),
-  ]);
-
-  // const pegsCount = useMemo(
-  //   () => cells.reduce((sum, cur) => sum + cur.reduce((sum, cur) => sum + Number(cur), 0), 0),
-  //   [cells],
-  // );
+  const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
   function checkCell(i: number, j: number) {
     if (curCell == null) return false;
@@ -80,7 +74,7 @@ export const PegField = (props: Props) => {
   }, [cells]);
 
   useEffect(() => {
-    setCells([...structuredClone(initialCells.map((cellsLine) => cellsLine.map((cell) => cell)))]);
+    setCells(copyToMutableArray(initialCells));
   }, [restartTrigger, initialCells]);
 
   return (
