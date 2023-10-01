@@ -10,7 +10,7 @@ export default merge(common, {
     },
     port: 3001,
     hot: true,
-    open: true,
+    open: false,
     historyApiFallback: true,
     headers: {
       'Access-Control-Allow-Origin': '*',

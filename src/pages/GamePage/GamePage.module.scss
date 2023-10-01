@@ -1,0 +1,20 @@
+.GamePage {
+  margin: auto auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+
+  .title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .buttonPanel {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+}
