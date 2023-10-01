@@ -13,9 +13,7 @@
     justify-content: center;
     align-content: center;
     border-radius: 5px;
-    $peg-color: #4a4854;
-
-    // background-color: $cell-color;
+    $peg-color: #656370;
 
     .emptyCell,
     .cellWithPeg,
@@ -24,6 +22,7 @@
       height: 50px;
       border: #fff 1px solid;
       border-radius: 5px;
+      position: relative;
     }
 
     .voidCell {
@@ -38,18 +37,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
 
       .peg {
+        position: absolute;
+
         display: block;
         background: $peg-color;
-        width: 90%;
-        height: 90%;
+        $size: 80%;
+        width: $size;
+        height: $size;
         border-radius: 50px;
       }
     }
 
     .activeCell {
-      background-color: lighten($cell-color, 0.3);
+      background-color: lighten($cell-color, 8%);
 
       .peg {
         transform: scale(1.1);

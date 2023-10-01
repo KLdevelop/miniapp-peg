@@ -26,13 +26,11 @@ export const LevelsModal = (props: Props) => {
       overlayClassName={styles.LevelsModalOverlay}
       onRequestClose={() => setIsOpenModal(false)}
     >
-      <div className={styles.content}>
-        {levels.map((lvl) => (
-          <div key={lvl.title} className={styles.level} onClick={() => openLevel(lvl)}>
-            <p className={styles.lvlTitle}>{lvl.title}</p>
-          </div>
-        ))}
-      </div>
+      {levels.map((lvl) => (
+        <div key={lvl.title} className={styles.level} onClick={() => openLevel(lvl)}>
+          <p className={styles.lvlTitle}>{lvl.title}</p>
+        </div>
+      ))}
     </Modal>
   );
 };
