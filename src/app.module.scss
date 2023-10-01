@@ -5,14 +5,15 @@
   font-size: 16px;
   background-color: var(--tg-theme-bg-color);
   color: var(--tg-theme-text-color);
-  // display: grid;
-  // justify-content: center;
-  // display: flex;
   width: 100vw;
   height: 100vh;
+  // display: grid;
   // justify-content: center;
-  // align-content: center;
-  // align-items: center;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-content: center;
+  align-items: center;
   // color: rgb(60, 60, 60);
 }
 

@@ -13,6 +13,10 @@
   overflow-y: auto;
   padding: 5px 10px;
 
+  &:focus {
+    outline: none;
+  }
+
   .level {
     width: 100%;
     height: 80px;
