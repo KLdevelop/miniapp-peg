@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    border-radius: 5px;
 
     $cell-color: #303030;
     $peg-color: #4a4854;
@@ -28,6 +29,7 @@
       width: 50px;
       height: 50px;
       opacity: 0;
+      border-radius: 5px;
     }
 
     .cellWithPeg,
