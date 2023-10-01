@@ -2,18 +2,26 @@
   width: fit-content;
   height: fit-content;
   border: #fff 2px solid;
+  border-radius: 5px;
   margin: auto auto;
 
   .cellsLine {
     display: flex;
     justify-content: center;
     align-content: center;
+
+    $cell-color: #303030;
+    $peg-color: #4a4854;
+
+    background-color: $cell-color;
+
     .emptyCell,
     .cellWithPeg,
     .activeCell {
       width: 50px;
       height: 50px;
       border: #fff 1px solid;
+      border-radius: 5px;
     }
 
     .voidCell {
@@ -27,16 +35,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      &:hover {
-        background: #676161;
 
-        .peg {
-          transform: scale(1.1);
-        }
-      }
       .peg {
         display: block;
-        background: #988d8d;
+        background: $peg-color;
         width: 90%;
         height: 90%;
         border-radius: 50px;
@@ -44,12 +46,11 @@
     }
 
     .activeCell {
-      background: #676161;
+      background-color: lighten($cell-color, 0.1);
+
       .peg {
         transform: scale(1.1);
       }
     }
-
-    background: #303030;
   }
 }
