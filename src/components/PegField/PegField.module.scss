@@ -5,8 +5,8 @@
   border-radius: 5px;
   $cell-color: #303030;
   background-color: $cell-color;
-
   margin: auto auto;
+  padding: 1px;
 
   .cellsLine {
     display: flex;
@@ -49,7 +49,7 @@
     }
 
     .activeCell {
-      background-color: lighten($cell-color, 0.1);
+      background-color: lighten($cell-color, 0.3);
 
       .peg {
         transform: scale(1.1);
