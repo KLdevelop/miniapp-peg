@@ -3,6 +3,9 @@
   height: fit-content;
   border: #fff 2px solid;
   border-radius: 5px;
+  $cell-color: #303030;
+  background-color: $cell-color;
+
   margin: auto auto;
 
   .cellsLine {
@@ -10,11 +13,9 @@
     justify-content: center;
     align-content: center;
     border-radius: 5px;
-
-    $cell-color: #303030;
     $peg-color: #4a4854;
 
-    background-color: $cell-color;
+    // background-color: $cell-color;
 
     .emptyCell,
     .cellWithPeg,
