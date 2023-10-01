@@ -2,3 +2,4 @@
 /.git
 /.vscode
 *.log
+force_ghp_update.bash
