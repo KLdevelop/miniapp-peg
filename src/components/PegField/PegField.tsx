@@ -68,7 +68,7 @@ export const PegField = (props: Props) => {
   useEffect(() => {
     const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
-    if (pegsCount === 1) alert('Вы победили!');
+    if (pegsCount <= 1) alert('Вы победили!');
   }, [cells]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 const fieldSize = 7;
-const voidCells = [
+const voidCells = Object.freeze([
   '00',
   '01',
   '10',
@@ -16,14 +16,14 @@ const voidCells = [
   '65',
   '66',
   '56',
-] as const;
+]);
 const initialCells = (() => {
   const cells = [] as boolean[][];
 
   for (let i = 0; i < fieldSize; i++) {
     const cellsLine = [] as boolean[];
 
-    for (let j = 0; j < fieldSize; j++) cellsLine.push(true);
+    for (let j = 0; j < fieldSize; j++) cellsLine.push(voidCells.indexOf('' + i + j) === -1);
 
     cells.push(cellsLine);
   }
