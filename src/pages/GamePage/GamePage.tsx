@@ -20,7 +20,7 @@ export const GamePage = () => {
         <button onClick={restartCurrentLevel}>Restart</button>
       </div>
       <LevelsModal
-        isOpen={isLevelModalOpen}
+        isOpen={currentLevel === null || isLevelModalOpen}
         setIsOpenModal={setIsLevelModalOpen}
         setLevel={setCurrentLevel}
       />
