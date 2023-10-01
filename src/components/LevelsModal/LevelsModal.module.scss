@@ -6,9 +6,10 @@
   width: 80%;
   height: 70%;
   border-radius: 5px;
-  background: var(--tg-theme-bg-color);
+  background: mix(var(--tg-theme-bg-color), #5a52cb, 50%);
   color: var(--tg-theme-text-color);
   border: none;
+  outline: none;
   overflow-y: auto;
   padding: 5px 10px;
 
