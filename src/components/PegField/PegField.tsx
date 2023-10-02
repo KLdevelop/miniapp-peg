@@ -18,10 +18,19 @@ export const PegField = (props: Props) => {
   const { initialCells, voidCells, restartTrigger } = props;
   const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
-  function checkCell(i: number, j: number) {
-    if (curCell == null) return false;
+  const [initialClient, setInitialClient] = useState([0, 0]);
 
-    if (cells[i][j] === true) return false;
+  function checkCell(i: number, j: number) {
+    if (
+      curCell === null ||
+      i < 0 ||
+      j < 0 ||
+      i === cells.length ||
+      j === cells.length ||
+      cells[i][j] === true ||
+      voidCells.indexOf('' + i + j) !== -1
+    )
+      return false;
 
     if (i === curCell.i) {
       if (j === curCell.j + 2) return cells[i][j - 1];
@@ -54,16 +63,15 @@ export const PegField = (props: Props) => {
       newCells[i][j] = true;
 
       setCells(newCells);
-    }
-    setCurCell(null);
+    } else setCurCell(null);
   }
 
-  const onCellClick = (i: number, j: number) => {
+  function onCellClick(i: number, j: number) {
     if (curCell === null) {
       if (cells[i][j]) setCurCell({ i, j });
     } else if (i !== curCell.i || j !== curCell.j) makeTurn(i, j);
     else setCurCell(null);
-  };
+  }
 
   useEffect(() => {
     const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
@@ -75,8 +83,30 @@ export const PegField = (props: Props) => {
     setCells(copyToMutableArray(initialCells));
   }, [restartTrigger, initialCells]);
 
+  function onStartSwiping(e: React.TouchEvent, i: number, j: number) {
+    if (cells[i][j] === false) return;
+
+    setCurCell({ i, j });
+    setInitialClient([e.touches[0].clientX, e.touches[0].clientY]);
+  }
+
+  function onStopSwiping(e: React.TouchEvent) {
+    if (curCell === null) return;
+
+    const difClientX = e.touches[e.touches.length - 1].clientX - initialClient[0];
+    const difClientY = e.touches[e.touches.length - 1].clientY - initialClient[1];
+
+    if (Math.abs(difClientX) > Math.abs(difClientY)) {
+      if (difClientX > 30) makeTurn(curCell.i, curCell.j + 1);
+      else if (difClientX < 30) makeTurn(curCell.i, curCell.j - 1);
+    } else {
+      if (difClientY > 30) makeTurn(curCell.i + 1, curCell.j);
+      else if (difClientY < 30) makeTurn(curCell.i - 1, curCell.j);
+    }
+  }
+
   return (
-    <div className={styles.PegField}>
+    <div className={styles.PegField} onTouchEnd={onStopSwiping}>
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
           {cellsLine.map((cell, j) => {
@@ -91,6 +121,7 @@ export const PegField = (props: Props) => {
                 }
                 key={'' + i + j}
                 onClick={() => onCellClick(i, j)}
+                onTouchStart={(e) => onStartSwiping(e, i, j)}
               >
                 <span className={styles.peg}></span>
               </div>
