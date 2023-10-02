@@ -20,6 +20,7 @@ export const PegField = (props: Props) => {
   const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
   const { ref } = useSwipeable({
+    preventScrollOnSwipe: true,
     onSwipedLeft: () => {
       if (curCell === null) return;
       makeTurn(curCell.i, curCell.j - 2);
@@ -39,7 +40,6 @@ export const PegField = (props: Props) => {
     onTouchEndOrOnMouseUp: () => {
       setCurCell(null);
     },
-    preventScrollOnSwipe: true,
   });
 
   // useEffect(() => {
