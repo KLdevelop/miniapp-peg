@@ -3,15 +3,26 @@
 :global(#app) {
   font-family: 'Roboto';
   font-size: 16px;
+  background-color: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  width: 100vw;
+  height: 100vh;
   // display: grid;
   // justify-content: center;
-  // display: flex;
-  // width: 100vw;
-  // height: 100vh;
+  display: flex;
+  flex-direction: column;
   // justify-content: center;
-  // align-content: center;
-  // align-items: center;
-  color: rgb(60, 60, 60);
+  align-content: center;
+  align-items: center;
+  // color: rgb(60, 60, 60);
+}
+
+button {
+  background-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  outline: none;
+  border: none;
+  border: 5px;
 }
 
 *:not(button) {

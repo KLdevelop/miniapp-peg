@@ -1,5 +1,5 @@
 .GamePage {
-  margin: auto auto;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,14 +7,20 @@
   align-items: center;
 
   .title {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin-bottom: 20px;
   }
 
   .buttonPanel {
-    margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     gap: 20px;
+
+    button {
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 5px;
+    }
   }
 }

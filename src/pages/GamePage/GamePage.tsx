@@ -14,13 +14,13 @@ export const GamePage = () => {
   return (
     <div className={styles.GamePage}>
       {currentLevel !== null && <p className={styles.title}>{currentLevel.title}</p>}
-      {currentLevel !== null && <PegField {...currentLevel} restartTrigger={restartTrigger} />}
       <div className={styles.buttonPanel}>
         <button onClick={() => setIsLevelModalOpen(true)}>Choose level</button>
         <button onClick={restartCurrentLevel}>Restart</button>
       </div>
+      {currentLevel !== null && <PegField {...currentLevel} restartTrigger={restartTrigger} />}
       <LevelsModal
-        isOpen={isLevelModalOpen}
+        isOpen={currentLevel === null || isLevelModalOpen}
         setIsOpenModal={setIsLevelModalOpen}
         setLevel={setCurrentLevel}
       />
