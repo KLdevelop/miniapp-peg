@@ -117,9 +117,18 @@ export const PegField = (props: Props) => {
     <div
       className={styles.PegField}
       ref={ref}
-      onMouseMove={(e) => e.stopPropagation()}
-      onScroll={(e) => e.stopPropagation}
-      onTouchMove={(e) => e.stopPropagation()}
+      onMouseMove={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onScroll={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onTouchMove={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
     >
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
