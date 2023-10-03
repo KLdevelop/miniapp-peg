@@ -42,10 +42,6 @@ export const PegField = (props: Props) => {
     },
   });
 
-  // useEffect(() => {
-  //   if (curCell !== null && cells[curCell.i][curCell.j] === false) setCurCell(null);
-  // }, [curCell, cells]);
-
   function checkCell(i: number, j: number) {
     if (
       curCell === null ||
@@ -113,23 +109,20 @@ export const PegField = (props: Props) => {
     setCurCell({ i, j });
   }
 
+  useEffect(() => {
+    window.ontouchmove = (e) => e.preventDefault();
+    window.onscroll = (e) => e.preventDefault();
+    window.ontouchstart = (e) => e.preventDefault();
+
+    return () => {
+      window.ontouchmove = null;
+      window.onscroll = null;
+      window.ontouchstart = null;
+    };
+  }, []);
+
   return (
-    <div
-      className={styles.PegField}
-      ref={ref}
-      onMouseMove={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      onScroll={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      onTouchMove={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-    >
+    <div className={styles.PegField} ref={ref}>
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
           {cellsLine.map((cell, j) => {
