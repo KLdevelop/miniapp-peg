@@ -6,6 +6,12 @@ export const GamePage = () => {
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(true);
   const [currentLevel, setCurrentLevel] = useState<null | Level>(null);
   const [restartTrigger, triggerRestart] = useState(false);
+  const [controlMode, setControlMode] = useState<ControlMode>('touch');
+
+  function changeControlMode() {
+    if (controlMode === 'touch') setControlMode('swipes');
+    else setControlMode('touch');
+  }
 
   function restartCurrentLevel() {
     triggerRestart(!restartTrigger);
@@ -18,7 +24,13 @@ export const GamePage = () => {
         <button onClick={() => setIsLevelModalOpen(true)}>Choose level</button>
         <button onClick={restartCurrentLevel}>Restart</button>
       </div>
-      {currentLevel !== null && <PegField {...currentLevel} restartTrigger={restartTrigger} />}
+      <button
+        className={styles.controlMode}
+        onClick={changeControlMode}
+      >{`Control mode: ${controlMode}`}</button>
+      {currentLevel !== null && (
+        <PegField controlMode={controlMode} {...currentLevel} restartTrigger={restartTrigger} />
+      )}
       <LevelsModal
         isOpen={currentLevel === null || isLevelModalOpen}
         setIsOpenModal={setIsLevelModalOpen}
