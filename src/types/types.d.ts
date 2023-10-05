@@ -14,3 +14,5 @@ type Level = Readonly<{
   initialCells: InitialCells;
   voidCells: VoidCells;
 }>;
+
+type ControlMode = 'touch' | 'swipes';

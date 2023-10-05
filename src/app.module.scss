@@ -1,7 +1,10 @@
 @use '/src/assets/fonts/Roboto';
 
 :global(#app) {
-  font-family: 'Roboto';
+  * {
+    font-family: 'Helvetica', 'Roboto', sans-serif;
+  }
+
   font-size: 16px;
   background-color: var(--tg-theme-bg-color);
   color: var(--tg-theme-text-color);
@@ -25,8 +28,11 @@ button {
   border: 5px;
 }
 
-*:not(button) {
+* {
   margin: 0;
-  padding: 0;
   box-sizing: border-box;
+
+  &:not(button) {
+    padding: 0;
+  }
 }

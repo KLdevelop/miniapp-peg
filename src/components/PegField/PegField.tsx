@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './PegField.module.scss';
+import { useSwipeable } from 'react-swipeable';
 import { copyToMutableArray } from 'src/utils';
 
 interface Cell {
@@ -8,6 +9,7 @@ interface Cell {
 }
 
 interface Props {
+  controlMode: ControlMode;
   initialCells: InitialCells;
   voidCells: VoidCells;
   restartTrigger?: boolean;
@@ -15,13 +17,43 @@ interface Props {
 
 export const PegField = (props: Props) => {
   const [curCell, setCurCell] = useState<null | Cell>(null);
-  const { initialCells, voidCells, restartTrigger } = props;
+  const { controlMode, initialCells, voidCells, restartTrigger } = props;
   const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
-  function checkCell(i: number, j: number) {
-    if (curCell == null) return false;
+  const { ref } = useSwipeable({
+    preventScrollOnSwipe: true,
+    onSwipedLeft: () => {
+      if (curCell === null || controlMode === 'touch') return;
+      makeTurn(curCell.i, curCell.j - 2);
+    },
+    onSwipedRight: () => {
+      if (curCell === null || controlMode === 'touch') return;
+      makeTurn(curCell.i, curCell.j + 2);
+    },
+    onSwipedUp: () => {
+      if (curCell === null || controlMode === 'touch') return;
+      makeTurn(curCell.i - 2, curCell.j);
+    },
+    onSwipedDown: () => {
+      if (curCell === null || controlMode === 'touch') return;
+      makeTurn(curCell.i + 2, curCell.j);
+    },
+    onTouchEndOrOnMouseUp: () => {
+      if (controlMode !== 'touch') setCurCell(null);
+    },
+  });
 
-    if (cells[i][j] === true) return false;
+  function checkCell(i: number, j: number) {
+    if (
+      curCell === null ||
+      i < 0 ||
+      j < 0 ||
+      i === cells.length ||
+      j === cells.length ||
+      cells[i][j] === true ||
+      voidCells.indexOf('' + i + j) !== -1
+    )
+      return false;
 
     if (i === curCell.i) {
       if (j === curCell.j + 2) return cells[i][j - 1];
@@ -37,12 +69,13 @@ export const PegField = (props: Props) => {
   }
 
   function makeTurn(i: number, j: number) {
-    if (curCell == null) return;
+    if (curCell === null) return false;
 
     const newCells = [...cells];
 
     if (checkCell(i, j)) {
       newCells[curCell.i][curCell.j] = false;
+
       if (i === curCell.i) {
         if (j === curCell.j + 2) newCells[i][j - 1] = false;
         else if (j === curCell.j - 2) newCells[i][j + 1] = false;
@@ -54,21 +87,31 @@ export const PegField = (props: Props) => {
       newCells[i][j] = true;
 
       setCells(newCells);
+
+      return true;
     }
-    setCurCell(null);
+
+    return false;
   }
 
-  const onCellClick = (i: number, j: number) => {
-    if (curCell === null) {
-      if (cells[i][j]) setCurCell({ i, j });
-    } else if (i !== curCell.i || j !== curCell.j) makeTurn(i, j);
-    else setCurCell(null);
-  };
+  function onCellClick(i: number, j: number) {
+    if (cells[i][j] === true) {
+      if (curCell === null || curCell.i !== i || curCell.j !== j) setCurCell({ i, j });
+      else setCurCell(null);
+    } else if (curCell !== null) if (makeTurn(i, j) === false) setCurCell(null);
+  }
+
+  function onStartSwiping(i: number, j: number) {
+    console.log('swipe', i, j);
+    if (cells[i][j] === false) return;
+
+    setCurCell({ i, j });
+  }
 
   useEffect(() => {
     const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
-    if (pegsCount <= 1) alert('Вы победили!');
+    if (pegsCount <= 1) alert('You won!');
   }, [cells]);
 
   useEffect(() => {
@@ -76,7 +119,7 @@ export const PegField = (props: Props) => {
   }, [restartTrigger, initialCells]);
 
   return (
-    <div className={styles.PegField}>
+    <div className={styles.PegField} ref={ref}>
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
           {cellsLine.map((cell, j) => {
@@ -90,7 +133,9 @@ export const PegField = (props: Props) => {
                     : styles.cellWithPeg
                 }
                 key={'' + i + j}
-                onClick={() => onCellClick(i, j)}
+                onTouchStart={
+                  controlMode === 'swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
+                }
               >
                 <span className={styles.peg}></span>
               </div>
@@ -98,7 +143,7 @@ export const PegField = (props: Props) => {
               <div
                 className={styles.emptyCell}
                 key={'' + i + j}
-                onClick={() => onCellClick(i, j)}
+                onTouchStart={controlMode === 'touch' ? () => onCellClick(i, j) : undefined}
               />
             );
           })}
