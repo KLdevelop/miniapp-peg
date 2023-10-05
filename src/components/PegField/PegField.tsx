@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './PegField.module.scss';
 import { useSwipeable } from 'react-swipeable';
 import { copyToMutableArray } from 'src/utils';
@@ -43,37 +43,39 @@ export const PegField = (props: Props) => {
     },
   });
 
-  function checkCell(i: number, j: number) {
-    if (
-      curCell === null ||
-      i < 0 ||
-      j < 0 ||
-      i === cells.length ||
-      j === cells.length ||
-      cells[i][j] === true ||
-      voidCells.indexOf('' + i + j) !== -1
-    )
-      return false;
+  const checkCell = useCallback(
+    function checkCell(i: number, j: number, cell: Cell): boolean {
+      if (
+        i < 0 ||
+        j < 0 ||
+        i === cells.length ||
+        j === cells.length ||
+        cells[i][j] === true ||
+        voidCells.indexOf('' + i + j) !== -1
+      )
+        return false;
 
-    if (i === curCell.i) {
-      if (j === curCell.j + 2) return cells[i][j - 1];
-      else if (j === curCell.j - 2) return cells[i][j + 1];
-      return false;
-    } else if (j === curCell.j) {
-      if (i === curCell.i + 2) return cells[i - 1][j];
-      else if (i === curCell.i - 2) return cells[i + 1][j];
-      return false;
-    }
+      if (i === cell.i) {
+        if (j === cell.j + 2) return cells[i][j - 1];
+        else if (j === cell.j - 2) return cells[i][j + 1];
+        return false;
+      } else if (j === cell.j) {
+        if (i === cell.i + 2) return cells[i - 1][j];
+        else if (i === cell.i - 2) return cells[i + 1][j];
+        return false;
+      }
 
-    return false;
-  }
+      return false;
+    },
+    [cells, voidCells],
+  );
 
   function makeTurn(i: number, j: number) {
     if (curCell === null) return false;
 
     const newCells = [...cells];
 
-    if (checkCell(i, j)) {
+    if (checkCell(i, j, curCell)) {
       newCells[curCell.i][curCell.j] = false;
 
       if (i === curCell.i) {
@@ -102,7 +104,6 @@ export const PegField = (props: Props) => {
   }
 
   function onStartSwiping(i: number, j: number) {
-    console.log('swipe', i, j);
     if (cells[i][j] === false) return;
 
     setCurCell({ i, j });
@@ -112,7 +113,27 @@ export const PegField = (props: Props) => {
     const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
     if (pegsCount <= 1) alert('You won!');
-  }, [cells]);
+    else {
+      let outOfMoves = true;
+
+      cellChecking: for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells.length; j++) {
+          if (
+            cells[i][j] === true &&
+            (checkCell(i - 2, j, { i, j }) ||
+              checkCell(i + 2, j, { i, j }) ||
+              checkCell(i, j - 2, { i, j }) ||
+              checkCell(i, j + 2, { i, j }))
+          ) {
+            outOfMoves = false;
+            break cellChecking;
+          }
+        }
+      }
+
+      if (outOfMoves) alert(`Sorry, you're out of moves`);
+    }
+  }, [cells, checkCell]);
 
   useEffect(() => {
     setCells(copyToMutableArray(initialCells));
