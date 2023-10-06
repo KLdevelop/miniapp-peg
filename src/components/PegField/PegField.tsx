@@ -23,23 +23,23 @@ export const PegField = (props: Props) => {
   const { ref } = useSwipeable({
     preventScrollOnSwipe: true,
     onSwipedLeft: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i, curCell.j - 2);
     },
     onSwipedRight: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i, curCell.j + 2);
     },
     onSwipedUp: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i - 2, curCell.j);
     },
     onSwipedDown: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i + 2, curCell.j);
     },
     onTouchEndOrOnMouseUp: () => {
-      if (controlMode !== 'touch') setCurCell(null);
+      if (controlMode !== 'Touch') setCurCell(null);
     },
   });
 
@@ -163,7 +163,7 @@ export const PegField = (props: Props) => {
                 }
                 key={'' + i + j}
                 onTouchStart={
-                  controlMode === 'swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
+                  controlMode === 'Swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
                 }
               >
                 <span className={styles.peg}></span>
@@ -172,7 +172,7 @@ export const PegField = (props: Props) => {
               <div
                 className={styles.emptyCell}
                 key={'' + i + j}
-                onTouchStart={controlMode === 'touch' ? () => onCellClick(i, j) : undefined}
+                onTouchStart={controlMode === 'Touch' ? () => onCellClick(i, j) : undefined}
               />
             );
           })}

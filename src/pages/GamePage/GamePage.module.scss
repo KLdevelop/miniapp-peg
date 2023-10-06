@@ -15,17 +15,15 @@
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    width: 348px;
+    gap: 5px;
   }
 
   button {
     font-size: 1em;
     padding: 10px;
     border-radius: 5px;
-    background: #ada9a9;
-  }
-
-  .controlMode {
-    width: 90px;
+    // background: #ada9a9;
+    width: 100%;
   }
 }

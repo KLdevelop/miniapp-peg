@@ -6,7 +6,7 @@
   width: 80%;
   height: 70%;
   border-radius: 5px;
-  background: var(--tg-theme-secondary-bg-color);
+  background: var(--tg-theme-secondary-bg-color, #6b678c);
   color: var(--tg-theme-text-color);
   border: 1px var(--tg-theme-button-color) solid;
   outline: none;
