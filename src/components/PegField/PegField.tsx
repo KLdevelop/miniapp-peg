@@ -13,39 +13,39 @@ interface Props {
   initialCells: InitialCells;
   voidCells: VoidCells;
   restartTrigger?: boolean;
+  showEndModal: (message: string) => void;
 }
 
 export const PegField = (props: Props) => {
   const [curCell, setCurCell] = useState<null | Cell>(null);
-  const { controlMode, initialCells, voidCells, restartTrigger } = props;
+  const { controlMode, initialCells, voidCells, restartTrigger, showEndModal } = props;
   const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
   const { ref } = useSwipeable({
     preventScrollOnSwipe: true,
     onSwipedLeft: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i, curCell.j - 2);
     },
     onSwipedRight: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i, curCell.j + 2);
     },
     onSwipedUp: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i - 2, curCell.j);
     },
     onSwipedDown: () => {
-      if (curCell === null || controlMode === 'touch') return;
+      if (curCell === null || controlMode === 'Touch') return;
       makeTurn(curCell.i + 2, curCell.j);
     },
     onTouchEndOrOnMouseUp: () => {
-      if (controlMode !== 'touch') setCurCell(null);
+      if (controlMode !== 'Touch') setCurCell(null);
     },
   });
 
-  function checkCell(i: number, j: number) {
+  function checkCell(i: number, j: number, cell: Cell): boolean {
     if (
-      curCell === null ||
       i < 0 ||
       j < 0 ||
       i === cells.length ||
@@ -55,13 +55,13 @@ export const PegField = (props: Props) => {
     )
       return false;
 
-    if (i === curCell.i) {
-      if (j === curCell.j + 2) return cells[i][j - 1];
-      else if (j === curCell.j - 2) return cells[i][j + 1];
+    if (i === cell.i) {
+      if (j === cell.j + 2) return cells[i][j - 1];
+      else if (j === cell.j - 2) return cells[i][j + 1];
       return false;
-    } else if (j === curCell.j) {
-      if (i === curCell.i + 2) return cells[i - 1][j];
-      else if (i === curCell.i - 2) return cells[i + 1][j];
+    } else if (j === cell.j) {
+      if (i === cell.i + 2) return cells[i - 1][j];
+      else if (i === cell.i - 2) return cells[i + 1][j];
       return false;
     }
 
@@ -73,7 +73,7 @@ export const PegField = (props: Props) => {
 
     const newCells = [...cells];
 
-    if (checkCell(i, j)) {
+    if (checkCell(i, j, curCell)) {
       newCells[curCell.i][curCell.j] = false;
 
       if (i === curCell.i) {
@@ -98,24 +98,54 @@ export const PegField = (props: Props) => {
     if (cells[i][j] === true) {
       if (curCell === null || curCell.i !== i || curCell.j !== j) setCurCell({ i, j });
       else setCurCell(null);
-    } else if (curCell !== null) if (makeTurn(i, j) === false) setCurCell(null);
+    } else if (curCell !== null) {
+      if (makeTurn(i, j) === false) setCurCell(null);
+      else setCurCell({ i, j });
+    }
   }
 
   function onStartSwiping(i: number, j: number) {
-    console.log('swipe', i, j);
     if (cells[i][j] === false) return;
 
     setCurCell({ i, j });
   }
 
-  useEffect(() => {
-    const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
+  useEffect(
+    () =>
+      void setTimeout(() => {
+        const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
-    if (pegsCount <= 1) alert('You won!');
-  }, [cells]);
+        if (pegsCount <= 1) showEndModal('You won!');
+        else {
+          let outOfMoves = true;
+
+          cellChecking: for (let i = 0; i < cells.length; i++) {
+            for (let j = 0; j < cells.length; j++) {
+              if (
+                cells[i][j] === true &&
+                (checkCell(i - 2, j, { i, j }) ||
+                  checkCell(i + 2, j, { i, j }) ||
+                  checkCell(i, j - 2, { i, j }) ||
+                  checkCell(i, j + 2, { i, j }))
+              ) {
+                outOfMoves = false;
+                break cellChecking;
+              }
+            }
+          }
+
+          if (outOfMoves) {
+            showEndModal(`Sorry, you're out of moves`);
+          }
+        }
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cells],
+  );
 
   useEffect(() => {
     setCells(copyToMutableArray(initialCells));
+    setCurCell(null);
   }, [restartTrigger, initialCells]);
 
   return (
@@ -134,7 +164,7 @@ export const PegField = (props: Props) => {
                 }
                 key={'' + i + j}
                 onTouchStart={
-                  controlMode === 'swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
+                  controlMode === 'Swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
                 }
               >
                 <span className={styles.peg}></span>
@@ -143,7 +173,7 @@ export const PegField = (props: Props) => {
               <div
                 className={styles.emptyCell}
                 key={'' + i + j}
-                onTouchStart={controlMode === 'touch' ? () => onCellClick(i, j) : undefined}
+                onTouchStart={controlMode === 'Touch' ? () => onCellClick(i, j) : undefined}
               />
             );
           })}

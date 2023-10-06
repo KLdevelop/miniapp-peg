@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'react-modal';
+import { ContentModal } from 'src/components';
 import { levels } from 'src/data';
 import styles from './LevelsModal.module.scss';
 
@@ -17,20 +17,15 @@ export const LevelsModal = (props: Props) => {
     setIsOpenModal(false);
   }
 
-  Modal.setAppElement('#app');
-
   return (
-    <Modal
-      isOpen={isOpen}
-      className={styles.LevelsModal}
-      overlayClassName={styles.LevelsModalOverlay}
-      onRequestClose={() => setIsOpenModal(false)}
-    >
-      {levels.map((lvl) => (
-        <div key={lvl.title} className={styles.level} onClick={() => openLevel(lvl)}>
-          <p className={styles.lvlTitle}>{lvl.title}</p>
-        </div>
-      ))}
-    </Modal>
+    <ContentModal isOpen={isOpen} setIsOpenModal={setIsOpenModal}>
+      <div className={styles.LevelsModal}>
+        {levels.map((lvl) => (
+          <div key={lvl.title} className={styles.level} onClick={() => openLevel(lvl)}>
+            <p className={styles.lvlTitle}>{lvl.title}</p>
+          </div>
+        ))}
+      </div>
+    </ContentModal>
   );
 };

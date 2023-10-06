@@ -15,16 +15,41 @@
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    width: 348px;
+    gap: 5px;
+
+    button {
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+    }
+  }
+}
+
+.endModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  .message {
+    font-size: 1.2em;
+    margin-bottom: 15px;
   }
 
-  button {
-    font-size: 1em;
-    padding: 10px;
-    border-radius: 5px;
-  }
+  .buttonPanel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 5px;
 
-  .controlMode {
-    margin-bottom: 10px;
+    button {
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+    }
   }
 }
