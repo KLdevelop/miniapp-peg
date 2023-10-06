@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './PegField.module.scss';
 import { useSwipeable } from 'react-swipeable';
 import { copyToMutableArray } from 'src/utils';
@@ -43,32 +43,29 @@ export const PegField = (props: Props) => {
     },
   });
 
-  const checkCell = useCallback(
-    function checkCell(i: number, j: number, cell: Cell): boolean {
-      if (
-        i < 0 ||
-        j < 0 ||
-        i === cells.length ||
-        j === cells.length ||
-        cells[i][j] === true ||
-        voidCells.indexOf('' + i + j) !== -1
-      )
-        return false;
-
-      if (i === cell.i) {
-        if (j === cell.j + 2) return cells[i][j - 1];
-        else if (j === cell.j - 2) return cells[i][j + 1];
-        return false;
-      } else if (j === cell.j) {
-        if (i === cell.i + 2) return cells[i - 1][j];
-        else if (i === cell.i - 2) return cells[i + 1][j];
-        return false;
-      }
-
+  function checkCell(i: number, j: number, cell: Cell): boolean {
+    if (
+      i < 0 ||
+      j < 0 ||
+      i === cells.length ||
+      j === cells.length ||
+      cells[i][j] === true ||
+      voidCells.indexOf('' + i + j) !== -1
+    )
       return false;
-    },
-    [cells, voidCells],
-  );
+
+    if (i === cell.i) {
+      if (j === cell.j + 2) return cells[i][j - 1];
+      else if (j === cell.j - 2) return cells[i][j + 1];
+      return false;
+    } else if (j === cell.j) {
+      if (i === cell.i + 2) return cells[i - 1][j];
+      else if (i === cell.i - 2) return cells[i + 1][j];
+      return false;
+    }
+
+    return false;
+  }
 
   function makeTurn(i: number, j: number) {
     if (curCell === null) return false;
@@ -109,31 +106,38 @@ export const PegField = (props: Props) => {
     setCurCell({ i, j });
   }
 
-  useEffect(() => {
-    const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
+  useEffect(
+    () =>
+      void setTimeout(() => {
+        const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
-    if (pegsCount <= 1) alert('You won!');
-    else {
-      let outOfMoves = true;
+        if (pegsCount <= 1) alert('You won!');
+        else {
+          let outOfMoves = true;
 
-      cellChecking: for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells.length; j++) {
-          if (
-            cells[i][j] === true &&
-            (checkCell(i - 2, j, { i, j }) ||
-              checkCell(i + 2, j, { i, j }) ||
-              checkCell(i, j - 2, { i, j }) ||
-              checkCell(i, j + 2, { i, j }))
-          ) {
-            outOfMoves = false;
-            break cellChecking;
+          cellChecking: for (let i = 0; i < cells.length; i++) {
+            for (let j = 0; j < cells.length; j++) {
+              if (
+                cells[i][j] === true &&
+                (checkCell(i - 2, j, { i, j }) ||
+                  checkCell(i + 2, j, { i, j }) ||
+                  checkCell(i, j - 2, { i, j }) ||
+                  checkCell(i, j + 2, { i, j }))
+              ) {
+                outOfMoves = false;
+                break cellChecking;
+              }
+            }
+          }
+
+          if (outOfMoves) {
+            alert(`Sorry, you're out of moves`);
           }
         }
-      }
-
-      if (outOfMoves) alert(`Sorry, you're out of moves`);
-    }
-  }, [cells, checkCell]);
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cells],
+  );
 
   useEffect(() => {
     setCells(copyToMutableArray(initialCells));
