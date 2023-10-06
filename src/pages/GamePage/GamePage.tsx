@@ -21,14 +21,18 @@ export const GamePage = () => {
   }
 
   function showEndModal(message: string) {
-    setIsLevelModalOpen(false);
-    setEndMessage(message);
-    setIsEndModalOpen(true);
+    setTimeout(() => {
+      setIsLevelModalOpen(false);
+      setEndMessage(message);
+      setIsEndModalOpen(true);
+    });
   }
 
   function showLevelModal() {
-    setIsEndModalOpen(false);
-    setIsLevelModalOpen(true);
+    setTimeout(() => {
+      setIsEndModalOpen(false);
+      setIsLevelModalOpen(true);
+    });
   }
 
   return (
@@ -56,7 +60,7 @@ export const GamePage = () => {
         setIsOpenModal={setIsLevelModalOpen}
         setLevel={setCurrentLevel}
       />
-      <ContentModal isOpen={isEndModalOpen} setIsOpenModal={setIsEndModalOpen}>
+      <ContentModal isOpen={isEndModalOpen}>
         <div className={styles.endModal}>
           <p className={styles.message}>{endMessage}</p>
           <div className={styles.buttonPanel}>

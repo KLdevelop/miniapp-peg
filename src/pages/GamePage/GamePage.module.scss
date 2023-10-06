@@ -32,16 +32,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 
   .message {
     font-size: 1.2em;
+    margin-bottom: 15px;
   }
 
   .buttonPanel {
     display: flex;
     flex-direction: row;
-    width: 348px;
+    width: 100%;
     gap: 5px;
 
     button {

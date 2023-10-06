@@ -4,7 +4,7 @@ import styles from './ContentModal.module.scss';
 
 interface Props {
   isOpen: boolean;
-  setIsOpenModal: (isOpen: boolean) => void;
+  setIsOpenModal?: (isOpen: boolean) => void;
   children: ReactNode;
 }
 
@@ -18,7 +18,7 @@ export const ContentModal = (props: Props) => {
       isOpen={isOpen}
       className={styles.ContentModal}
       overlayClassName={styles.ContentModalOverlay}
-      onRequestClose={() => setIsOpenModal(false)}
+      onRequestClose={setIsOpenModal && (() => setIsOpenModal(false))}
     >
       {children}
     </Modal>

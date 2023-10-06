@@ -37,11 +37,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
 
       .peg {
-        position: absolute;
-
         display: block;
         background: $peg-color;
         $size: 80%;
