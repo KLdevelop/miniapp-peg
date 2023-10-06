@@ -23,11 +23,10 @@ export const GamePage = () => {
       <div className={styles.buttonPanel}>
         <button onClick={() => setIsLevelModalOpen(true)}>Choose level</button>
         <button onClick={restartCurrentLevel}>Restart</button>
+        <button className={styles.controlMode} onClick={changeControlMode}>
+          {controlMode}
+        </button>
       </div>
-      <button
-        className={styles.controlMode}
-        onClick={changeControlMode}
-      >{`Control mode: ${controlMode}`}</button>
       {currentLevel !== null && (
         <PegField controlMode={controlMode} {...currentLevel} restartTrigger={restartTrigger} />
       )}
