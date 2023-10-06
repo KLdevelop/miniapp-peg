@@ -17,13 +17,38 @@
     flex-direction: row;
     width: 348px;
     gap: 5px;
+
+    button {
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+    }
+  }
+}
+
+.endModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  .message {
+    font-size: 1.2em;
   }
 
-  button {
-    font-size: 1em;
-    padding: 10px;
-    border-radius: 5px;
-    // background: #ada9a9;
-    width: 100%;
+  .buttonPanel {
+    display: flex;
+    flex-direction: row;
+    width: 348px;
+    gap: 5px;
+
+    button {
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+    }
   }
 }

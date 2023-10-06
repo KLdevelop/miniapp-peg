@@ -13,11 +13,12 @@ interface Props {
   initialCells: InitialCells;
   voidCells: VoidCells;
   restartTrigger?: boolean;
+  showEndModal: (message: string) => void;
 }
 
 export const PegField = (props: Props) => {
   const [curCell, setCurCell] = useState<null | Cell>(null);
-  const { controlMode, initialCells, voidCells, restartTrigger } = props;
+  const { controlMode, initialCells, voidCells, restartTrigger, showEndModal } = props;
   const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
 
   const { ref } = useSwipeable({
@@ -114,7 +115,7 @@ export const PegField = (props: Props) => {
       void setTimeout(() => {
         const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
 
-        if (pegsCount <= 1) alert('You won!');
+        if (pegsCount <= 1) showEndModal('You won!');
         else {
           let outOfMoves = true;
 
@@ -134,7 +135,7 @@ export const PegField = (props: Props) => {
           }
 
           if (outOfMoves) {
-            alert(`Sorry, you're out of moves`);
+            showEndModal(`Sorry, you're out of moves`);
           }
         }
       }),

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { PegField, LevelsModal } from 'src/components';
+import { PegField, LevelsModal, ContentModal } from 'src/components';
 import styles from './GamePage.module.scss';
 
 export const GamePage = () => {
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(true);
+  const [isEndModalOpen, setIsEndModalOpen] = useState(false);
+  const [endMessage, setEndMessage] = useState('');
   const [currentLevel, setCurrentLevel] = useState<null | Level>(null);
   const [restartTrigger, triggerRestart] = useState(false);
   const [controlMode, setControlMode] = useState<ControlMode>('Touch');
@@ -14,7 +16,19 @@ export const GamePage = () => {
   }
 
   function restartCurrentLevel() {
+    setIsEndModalOpen(false);
     triggerRestart(!restartTrigger);
+  }
+
+  function showEndModal(message: string) {
+    setIsLevelModalOpen(false);
+    setEndMessage(message);
+    setIsEndModalOpen(true);
+  }
+
+  function showLevelModal() {
+    setIsEndModalOpen(false);
+    setIsLevelModalOpen(true);
   }
 
   return (
@@ -29,7 +43,12 @@ export const GamePage = () => {
               {controlMode}
             </button>
           </div>
-          <PegField controlMode={controlMode} {...currentLevel} restartTrigger={restartTrigger} />
+          <PegField
+            controlMode={controlMode}
+            {...currentLevel}
+            restartTrigger={restartTrigger}
+            showEndModal={showEndModal}
+          />
         </>
       )}
       <LevelsModal
@@ -37,6 +56,15 @@ export const GamePage = () => {
         setIsOpenModal={setIsLevelModalOpen}
         setLevel={setCurrentLevel}
       />
+      <ContentModal isOpen={isEndModalOpen} setIsOpenModal={setIsEndModalOpen}>
+        <div className={styles.endModal}>
+          <p className={styles.message}>{endMessage}</p>
+          <div className={styles.buttonPanel}>
+            <button onClick={showLevelModal}>Choose level</button>
+            <button onClick={restartCurrentLevel}>Restart</button>
+          </div>
+        </div>
+      </ContentModal>
     </div>
   );
 };
