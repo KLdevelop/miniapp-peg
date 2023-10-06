@@ -97,7 +97,10 @@ export const PegField = (props: Props) => {
     if (cells[i][j] === true) {
       if (curCell === null || curCell.i !== i || curCell.j !== j) setCurCell({ i, j });
       else setCurCell(null);
-    } else if (curCell !== null) if (makeTurn(i, j) === false) setCurCell(null);
+    } else if (curCell !== null) {
+      if (makeTurn(i, j) === false) setCurCell(null);
+      else setCurCell({ i, j });
+    }
   }
 
   function onStartSwiping(i: number, j: number) {
@@ -141,6 +144,7 @@ export const PegField = (props: Props) => {
 
   useEffect(() => {
     setCells(copyToMutableArray(initialCells));
+    setCurCell(null);
   }, [restartTrigger, initialCells]);
 
   return (
