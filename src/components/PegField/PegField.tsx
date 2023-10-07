@@ -68,7 +68,7 @@ export const PegField = (props: Props) => {
     return false;
   }
 
-  function makeTurn(i: number, j: number) {
+  function makeTurn(i: number, j: number): boolean {
     if (curCell === null) return false;
 
     const newCells = [...cells];
@@ -150,7 +150,7 @@ export const PegField = (props: Props) => {
   }, [restartTrigger, initialCells]);
 
   return (
-    <div className={styles.PegField} ref={ref} onTouchEnd={(e) => e.preventDefault()}>
+    <div className={styles.PegField} ref={ref}>
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
           {cellsLine.map((cell, j) => {
@@ -167,6 +167,7 @@ export const PegField = (props: Props) => {
                 onTouchStart={
                   controlMode === 'Swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
                 }
+                onTouchEnd={(e) => e.preventDefault()}
                 onMouseDown={
                   controlMode === 'Swipes' ? () => onStartSwiping(i, j) : () => onCellClick(i, j)
                 }
