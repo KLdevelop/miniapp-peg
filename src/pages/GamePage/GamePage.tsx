@@ -21,18 +21,8 @@ export const GamePage = () => {
   }
 
   function showEndModal(message: string) {
-    setTimeout(() => {
-      setIsLevelModalOpen(false);
-      setEndMessage(message);
-      setIsEndModalOpen(true);
-    });
-  }
-
-  function showLevelModal() {
-    setTimeout(() => {
-      setIsEndModalOpen(false);
-      setIsLevelModalOpen(true);
-    });
+    setEndMessage(message);
+    setIsEndModalOpen(true);
   }
 
   return (
@@ -64,8 +54,7 @@ export const GamePage = () => {
         <div className={styles.endModal}>
           <p className={styles.message}>{endMessage}</p>
           <div className={styles.buttonPanel}>
-            <button onClick={showLevelModal}>Choose level</button>
-            <button onClick={restartCurrentLevel}>Restart</button>
+            <button onClick={() => setIsEndModalOpen(false)}>Ok</button>
           </div>
         </div>
       </ContentModal>
