@@ -114,8 +114,11 @@ export const PegField = (props: Props) => {
       0,
     );
 
-    if (pegsCount <= 1) showEndModal('You won!');
-    else {
+    if (pegsCount <= 1) {
+      const mid = cells.length >> 1;
+      if (cells[mid][mid] === 'peg') showEndModal("Wow! You're awesome!");
+      else showEndModal('Great! Now you can try to leave a solitary peg in the center.');
+    } else {
       let outOfMoves = true;
 
       for (
