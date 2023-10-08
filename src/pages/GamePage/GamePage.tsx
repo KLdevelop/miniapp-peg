@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PegField, LevelsModal, ContentModal } from 'src/components';
 import styles from './GamePage.module.scss';
 
+/** Page with game field */
 export const GamePage = () => {
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(true);
   const [isEndModalOpen, setIsEndModalOpen] = useState(false);
@@ -9,11 +10,16 @@ export const GamePage = () => {
   const [currentLevel, setCurrentLevel] = useState<null | Level>(null);
   const [restartTrigger, triggerRestart] = useState(false);
 
+  /** Set all cells to initial. */
   function restartCurrentLevel() {
     setIsEndModalOpen(false);
     triggerRestart(!restartTrigger);
   }
 
+  /**
+   * Show modal with some message.
+   * @param message
+   */
   function showEndModal(message: string) {
     setEndMessage(message);
     setIsEndModalOpen(true);

@@ -8,6 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
+/** Custom modal. */
 export const ContentModal = (props: Props) => {
   const { isOpen, setIsOpenModal, children } = props;
 
