@@ -21,7 +21,8 @@ export const PegField = (props: Props) => {
   const [cells, setCells] = useState<CellState[][]>(copyToMutableArray(initialCells));
 
   const { ref } = useSwipeable({
-    trackTouch: true,
+    trackMouse: true,
+    preventScrollOnSwipe: true,
     onSwipedLeft: () => {
       if (curCell === null || controlMode === 'touch') return;
       makeTurn(curCell.i, curCell.j - 2);
@@ -45,8 +46,6 @@ export const PegField = (props: Props) => {
       setControlMode('touch');
       setCurCell(null);
     },
-    preventScrollOnSwipe: true,
-    trackMouse: true,
   });
 
   function checkCell(i: number, j: number, cell: Cell): boolean {
@@ -119,24 +118,26 @@ export const PegField = (props: Props) => {
     else {
       let outOfMoves = true;
 
-      cellChecking: for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells.length; j++) {
-          if (
-            cells[i][j] === 'peg' &&
-            (checkCell(i - 2, j, { i, j }) ||
+      for (
+        let i = 0, pegsChecked = 0;
+        i < cells.length && pegsChecked < pegsCount && outOfMoves;
+        i++
+      ) {
+        for (let j = 0; j < cells.length && pegsChecked < pegsCount && outOfMoves; j++) {
+          if (cells[i][j] === 'peg') {
+            if (
+              checkCell(i - 2, j, { i, j }) ||
               checkCell(i + 2, j, { i, j }) ||
               checkCell(i, j - 2, { i, j }) ||
-              checkCell(i, j + 2, { i, j }))
-          ) {
-            outOfMoves = false;
-            break cellChecking;
+              checkCell(i, j + 2, { i, j })
+            )
+              outOfMoves = false;
+            pegsChecked++;
           }
         }
       }
 
-      if (outOfMoves) {
-        showEndModal(`Sorry, you're out of moves.`);
-      }
+      if (outOfMoves) showEndModal(`Sorry, you're out of moves.`);
     }
   }
 
