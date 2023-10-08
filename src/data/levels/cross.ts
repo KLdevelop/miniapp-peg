@@ -1,39 +1,25 @@
-const fieldSize = 7;
-const voidCells = [
-  '00',
-  '01',
-  '10',
-  '11',
-  '06',
-  '05',
-  '16',
-  '15',
-  '60',
-  '50',
-  '61',
-  '51',
-  '55',
-  '65',
-  '66',
-  '56',
-] as const;
-const initialCells = (() => {
-  const cells = [] as boolean[][];
+import { setVoidCells } from './utils';
+
+const initialCells: InitialCells = (() => {
+  const fieldSize = 7;
+  const cells = [] as CellState[][];
 
   for (let i = 0; i < fieldSize; i++) {
-    const cellsLine = [] as boolean[];
+    const cellsLine = [] as CellState[];
 
-    for (let j = 0; j < fieldSize; j++) cellsLine.push(false);
+    for (let j = 0; j < fieldSize; j++) cellsLine.push('empty');
 
     cells.push(cellsLine);
   }
 
-  cells[1][3] = true;
-  cells[2][2] = true;
-  cells[2][3] = true;
-  cells[2][4] = true;
-  cells[3][3] = true;
-  cells[4][3] = true;
+  cells[1][3] = 'peg';
+  cells[2][2] = 'peg';
+  cells[2][3] = 'peg';
+  cells[2][4] = 'peg';
+  cells[3][3] = 'peg';
+  cells[4][3] = 'peg';
+
+  setVoidCells(cells);
 
   const frozenCells = cells.map((cellLine) => Object.freeze(cellLine));
 
@@ -43,5 +29,4 @@ const initialCells = (() => {
 export default Object.freeze({
   title: 'Cross',
   initialCells,
-  voidCells,
 }) as Level;
