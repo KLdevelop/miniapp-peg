@@ -5,14 +5,11 @@ type Mutable<T> = {
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-type InitialCells = readonly (readonly boolean[])[];
+type CellState = 'void' | 'empty' | 'peg';
 
-type VoidCells = readonly string[];
+type InitialCells = readonly (readonly CellState[])[];
 
 type Level = Readonly<{
   title: string;
   initialCells: InitialCells;
-  voidCells: VoidCells;
 }>;
-
-type ControlMode = 'Touch' | 'Swipes';

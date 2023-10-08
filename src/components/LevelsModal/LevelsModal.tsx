@@ -9,6 +9,7 @@ interface Props {
   setLevel: (lvl: Level) => void;
 }
 
+/** Level selection modal */
 export const LevelsModal = (props: Props) => {
   const { isOpen, setIsOpenModal, setLevel } = props;
 

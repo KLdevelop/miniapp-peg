@@ -1,34 +1,20 @@
-const fieldSize = 7;
-const voidCells = Object.freeze([
-  '00',
-  '01',
-  '10',
-  '11',
-  '06',
-  '05',
-  '16',
-  '15',
-  '60',
-  '50',
-  '61',
-  '51',
-  '55',
-  '65',
-  '66',
-  '56',
-]);
-const initialCells = (() => {
-  const cells = [] as boolean[][];
+import { setVoidCells } from './utils';
+
+const initialCells: InitialCells = (() => {
+  const fieldSize = 7;
+  const cells = [] as CellState[][];
 
   for (let i = 0; i < fieldSize; i++) {
-    const cellsLine = [] as boolean[];
+    const cellsLine = [] as CellState[];
 
-    for (let j = 0; j < fieldSize; j++) cellsLine.push(voidCells.indexOf('' + i + j) === -1);
+    for (let j = 0; j < fieldSize; j++) cellsLine.push('peg');
 
     cells.push(cellsLine);
   }
 
-  cells[3][3] = false;
+  cells[3][3] = 'empty';
+
+  setVoidCells(cells);
 
   const frozenCells = cells.map((cellLine) => Object.freeze(cellLine));
 
@@ -38,5 +24,4 @@ const initialCells = (() => {
 export default Object.freeze({
   title: 'Solitaire',
   initialCells,
-  voidCells,
 }) as Level;

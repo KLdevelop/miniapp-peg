@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PegField, LevelsModal, ContentModal } from 'src/components';
 import styles from './GamePage.module.scss';
 
+/** Page with game field */
 export const GamePage = () => {
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(true);
   const [isEndModalOpen, setIsEndModalOpen] = useState(false);
@@ -9,11 +10,16 @@ export const GamePage = () => {
   const [currentLevel, setCurrentLevel] = useState<null | Level>(null);
   const [restartTrigger, triggerRestart] = useState(false);
 
+  /** Set all cells to initial. */
   function restartCurrentLevel() {
     setIsEndModalOpen(false);
     triggerRestart(!restartTrigger);
   }
 
+  /**
+   * Show modal with some message.
+   * @param message
+   */
   function showEndModal(message: string) {
     setEndMessage(message);
     setIsEndModalOpen(true);
@@ -29,6 +35,12 @@ export const GamePage = () => {
             <button onClick={restartCurrentLevel}>Restart</button>
           </div>
           <PegField {...currentLevel} restartTrigger={restartTrigger} showEndModal={showEndModal} />
+          <div className={styles.info}>
+            <p>
+              You can move a peg orthogonally over an adjacent peg into a hole two positions away.
+            </p>
+            <p>Goal: empty the entire field except for a solitary peg in the central hole.</p>
+          </div>
         </>
       )}
       <LevelsModal

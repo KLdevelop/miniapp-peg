@@ -8,89 +8,102 @@ interface Cell {
   j: number;
 }
 
+type ControlMode = 'touch' | 'swipes';
+
 interface Props {
   initialCells: InitialCells;
-  voidCells: VoidCells;
+  /** When it changes, cells are set to initial. */
   restartTrigger?: boolean;
   showEndModal: (message: string) => void;
 }
 
 export const PegField = (props: Props) => {
   const [curCell, setCurCell] = useState<null | Cell>(null);
-  const [controlMode, setControlMode] = useState<ControlMode>('Touch');
-  const { initialCells, voidCells, restartTrigger, showEndModal } = props;
-  const [cells, setCells] = useState<boolean[][]>(copyToMutableArray(initialCells));
+  const [controlMode, setControlMode] = useState<ControlMode>('touch');
+  const { initialCells, restartTrigger, showEndModal } = props;
+  const [cells, setCells] = useState<CellState[][]>(copyToMutableArray(initialCells));
 
   const { ref } = useSwipeable({
-    trackTouch: true,
+    trackMouse: true,
+    preventScrollOnSwipe: true,
     onSwipedLeft: () => {
-      if (curCell === null || controlMode === 'Touch') return;
-      makeTurn(curCell.i, curCell.j - 2);
+      if (curCell === null || controlMode === 'touch') return;
+      makeMove(curCell.i, curCell.j - 2);
     },
     onSwipedRight: () => {
-      if (curCell === null || controlMode === 'Touch') return;
-      makeTurn(curCell.i, curCell.j + 2);
+      if (curCell === null || controlMode === 'touch') return;
+      makeMove(curCell.i, curCell.j + 2);
     },
     onSwipedUp: () => {
-      if (curCell === null || controlMode === 'Touch') return;
-      makeTurn(curCell.i - 2, curCell.j);
+      if (curCell === null || controlMode === 'touch') return;
+      makeMove(curCell.i - 2, curCell.j);
     },
     onSwipedDown: () => {
-      if (curCell === null || controlMode === 'Touch') return;
-      makeTurn(curCell.i + 2, curCell.j);
+      if (curCell === null || controlMode === 'touch') return;
+      makeMove(curCell.i + 2, curCell.j);
     },
     onSwipeStart: () => {
-      setControlMode('Swipes');
+      setControlMode('swipes');
     },
     onSwiped: () => {
-      setControlMode('Touch');
+      setControlMode('touch');
       setCurCell(null);
     },
-    preventScrollOnSwipe: true,
-    trackMouse: true,
   });
 
+  /**
+   * Check if you can move the peg into the cell.
+   * @param i row index of the cell being checked.
+   * @param j column index of the cell being checked.
+   * @param cell cell with the peg.
+   */
   function checkCell(i: number, j: number, cell: Cell): boolean {
     if (
       i < 0 ||
       j < 0 ||
-      i === cells.length ||
-      j === cells.length ||
-      cells[i][j] === true ||
-      voidCells.indexOf('' + i + j) !== -1
+      i >= cells.length ||
+      j >= cells.length ||
+      cells[i][j] === 'peg' ||
+      cells[i][j] === 'void'
     )
       return false;
 
     if (i === cell.i) {
-      if (j === cell.j + 2) return cells[i][j - 1];
-      else if (j === cell.j - 2) return cells[i][j + 1];
+      if (j === cell.j + 2) return cells[i][j - 1] === 'peg';
+      else if (j === cell.j - 2) return cells[i][j + 1] === 'peg';
       return false;
     } else if (j === cell.j) {
-      if (i === cell.i + 2) return cells[i - 1][j];
-      else if (i === cell.i - 2) return cells[i + 1][j];
+      if (i === cell.i + 2) return cells[i - 1][j] === 'peg';
+      else if (i === cell.i - 2) return cells[i + 1][j] === 'peg';
       return false;
     }
 
     return false;
   }
 
-  function makeTurn(i: number, j: number): boolean {
+  /**
+   * Move the selected peg to the cell if possible.
+   * @param i row index of the cell.
+   * @param j column index of the cell.
+   * @returns is moved.
+   */
+  function makeMove(i: number, j: number): boolean {
     if (curCell === null) return false;
 
     const newCells = [...cells];
 
     if (checkCell(i, j, curCell)) {
-      newCells[curCell.i][curCell.j] = false;
+      newCells[curCell.i][curCell.j] = 'empty';
 
       if (i === curCell.i) {
-        if (j === curCell.j + 2) newCells[i][j - 1] = false;
-        else if (j === curCell.j - 2) newCells[i][j + 1] = false;
+        if (j === curCell.j + 2) newCells[i][j - 1] = 'empty';
+        else if (j === curCell.j - 2) newCells[i][j + 1] = 'empty';
       } else if (j === curCell.j) {
-        if (i === curCell.i + 2) newCells[i - 1][j] = false;
-        else if (i === curCell.i - 2) newCells[i + 1][j] = false;
+        if (i === curCell.i + 2) newCells[i - 1][j] = 'empty';
+        else if (i === curCell.i - 2) newCells[i + 1][j] = 'empty';
       }
 
-      newCells[i][j] = true;
+      newCells[i][j] = 'peg';
 
       setCells(newCells);
 
@@ -100,41 +113,51 @@ export const PegField = (props: Props) => {
     return false;
   }
 
+  /** Cell click handler. */
   function onCellClick(i: number, j: number) {
-    if (cells[i][j] === true) {
+    if (cells[i][j] === 'peg') {
       if (curCell === null || curCell.i !== i || curCell.j !== j) setCurCell({ i, j });
       else setCurCell(null);
     } else if (curCell !== null) {
-      if (makeTurn(i, j) === false) setCurCell(null);
+      if (makeMove(i, j) === false) setCurCell(null);
       else setCurCell({ i, j });
     }
   }
 
+  /** Check possible moves and show modal if necessary. */
   function checkMoves() {
-    const pegsCount = cells.reduce((sum, cur) => sum + cur.filter((cell) => cell).length, 0);
+    const pegsCount = cells.reduce(
+      (sum, cur) => sum + cur.filter((cell) => cell === 'peg').length,
+      0,
+    );
 
-    if (pegsCount <= 1) showEndModal('You won!');
-    else {
+    if (pegsCount <= 1) {
+      const mid = cells.length >> 1;
+      if (cells[mid][mid] === 'peg') showEndModal("Wow! You're awesome!");
+      else showEndModal('Great! Now you can try to leave a solitary peg in the center.');
+    } else {
       let outOfMoves = true;
 
-      cellChecking: for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells.length; j++) {
-          if (
-            cells[i][j] === true &&
-            (checkCell(i - 2, j, { i, j }) ||
+      for (
+        let i = 0, pegsChecked = 0;
+        i < cells.length && pegsChecked < pegsCount && outOfMoves;
+        i++
+      ) {
+        for (let j = 0; j < cells.length && pegsChecked < pegsCount && outOfMoves; j++) {
+          if (cells[i][j] === 'peg') {
+            if (
+              checkCell(i - 2, j, { i, j }) ||
               checkCell(i + 2, j, { i, j }) ||
               checkCell(i, j - 2, { i, j }) ||
-              checkCell(i, j + 2, { i, j }))
-          ) {
-            outOfMoves = false;
-            break cellChecking;
+              checkCell(i, j + 2, { i, j })
+            )
+              outOfMoves = false;
+            pegsChecked++;
           }
         }
       }
 
-      if (outOfMoves) {
-        showEndModal(`Sorry, you're out of moves.`);
-      }
+      if (outOfMoves) showEndModal(`Sorry, you're out of moves.`);
     }
   }
 
@@ -154,9 +177,9 @@ export const PegField = (props: Props) => {
       {cells.map((cellsLine, i) => (
         <div className={styles.cellsLine} key={i}>
           {cellsLine.map((cell, j) => {
-            return voidCells.includes('' + i + j) ? (
+            return cell === 'void' ? (
               <div className={styles.voidCell} key={'' + i + j}></div>
-            ) : cell ? (
+            ) : cell === 'peg' ? (
               <div
                 className={
                   curCell !== null && curCell.i === i && curCell.j === j
