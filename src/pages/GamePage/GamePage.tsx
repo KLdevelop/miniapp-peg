@@ -8,12 +8,6 @@ export const GamePage = () => {
   const [endMessage, setEndMessage] = useState('');
   const [currentLevel, setCurrentLevel] = useState<null | Level>(null);
   const [restartTrigger, triggerRestart] = useState(false);
-  const [controlMode, setControlMode] = useState<ControlMode>('Touch');
-
-  function changeControlMode() {
-    if (controlMode === 'Touch') setControlMode('Swipes');
-    else setControlMode('Touch');
-  }
 
   function restartCurrentLevel() {
     setIsEndModalOpen(false);
@@ -21,18 +15,8 @@ export const GamePage = () => {
   }
 
   function showEndModal(message: string) {
-    setTimeout(() => {
-      setIsLevelModalOpen(false);
-      setEndMessage(message);
-      setIsEndModalOpen(true);
-    });
-  }
-
-  function showLevelModal() {
-    setTimeout(() => {
-      setIsEndModalOpen(false);
-      setIsLevelModalOpen(true);
-    });
+    setEndMessage(message);
+    setIsEndModalOpen(true);
   }
 
   return (
@@ -43,16 +27,8 @@ export const GamePage = () => {
           <div className={styles.buttonPanel}>
             <button onClick={() => setIsLevelModalOpen(true)}>Choose level</button>
             <button onClick={restartCurrentLevel}>Restart</button>
-            <button className={styles.controlMode} onClick={changeControlMode}>
-              {controlMode}
-            </button>
           </div>
-          <PegField
-            controlMode={controlMode}
-            {...currentLevel}
-            restartTrigger={restartTrigger}
-            showEndModal={showEndModal}
-          />
+          <PegField {...currentLevel} restartTrigger={restartTrigger} showEndModal={showEndModal} />
         </>
       )}
       <LevelsModal
@@ -63,10 +39,7 @@ export const GamePage = () => {
       <ContentModal isOpen={isEndModalOpen}>
         <div className={styles.endModal}>
           <p className={styles.message}>{endMessage}</p>
-          <div className={styles.buttonPanel}>
-            <button onClick={showLevelModal}>Choose level</button>
-            <button onClick={restartCurrentLevel}>Restart</button>
-          </div>
+          <button onClick={() => setIsEndModalOpen(false)}>Ok</button>
         </div>
       </ContentModal>
     </div>
