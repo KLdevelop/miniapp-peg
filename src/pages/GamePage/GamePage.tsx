@@ -37,9 +37,9 @@ export const GamePage = () => {
           <PegField {...currentLevel} restartTrigger={restartTrigger} showEndModal={showEndModal} />
           <div className={styles.info}>
             <p>
-              You can move a peg orthogonally over an adjacent peg into a hole two positions away.
+              You can move a peg orthogonally over an adjacent peg into a cell two positions away.
             </p>
-            <p>Goal: empty the entire field except for a solitary peg in the central hole.</p>
+            <p>Goal: empty the entire field except for a solitary peg in the center.</p>
           </div>
         </>
       )}
