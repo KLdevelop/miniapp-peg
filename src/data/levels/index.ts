@@ -6,4 +6,12 @@ import arrow from './arrow';
 import plus from './plus';
 import fireplace from './fireplace';
 
-export const levels = [cross, solitaire, diamond, pyramid, arrow, plus, fireplace] as const;
+export const levels: readonly Level[] = Object.freeze([
+  cross,
+  solitaire,
+  diamond,
+  pyramid,
+  arrow,
+  plus,
+  fireplace,
+]);
