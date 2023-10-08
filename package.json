@@ -12,13 +12,13 @@
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "author": "KLdevelop",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
-    "react-swipeable": "^7.0.1",
-    "node-sass": "^8.0.0"
+    "react-swipeable": "^7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
