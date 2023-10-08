@@ -24,4 +24,4 @@ const initialCells: InitialCells = (() => {
 export default Object.freeze({
   title: 'Solitaire',
   initialCells,
-}) as Level;
+}) as Readonly<Level>;

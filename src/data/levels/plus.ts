@@ -25,4 +25,4 @@ const initialCells: InitialCells = (() => {
 export default Object.freeze({
   title: 'Plus',
   initialCells,
-}) as Level;
+}) as Readonly<Level>;

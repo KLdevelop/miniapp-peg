@@ -31,4 +31,4 @@ const initialCells: InitialCells = (() => {
 export default Object.freeze({
   title: 'Arrow',
   initialCells,
-}) as Level;
+}) as Readonly<Level>;

@@ -26,4 +26,4 @@ const initialCells: InitialCells = (() => {
 export default Object.freeze({
   title: 'Pyramid',
   initialCells,
-}) as Level;
+}) as Readonly<Level>;

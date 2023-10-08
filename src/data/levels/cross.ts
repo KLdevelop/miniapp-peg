@@ -29,4 +29,4 @@ const initialCells: InitialCells = (() => {
 export default Object.freeze({
   title: 'Cross',
   initialCells,
-}) as Level;
+}) as Readonly<Level>;
