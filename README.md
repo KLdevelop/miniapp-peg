@@ -1,4 +1,4 @@
-# Webapp Peg Solitaire
+# Mini App Peg Solitaire
 
 ## Overview
 
