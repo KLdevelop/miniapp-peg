@@ -24,6 +24,24 @@ The build is placed in dist directory.
 
 The build was tested for node.js 16.20.2
 
+## Project structure
+
+ * /config - webpack config
+ * /dist - build directory
+ * /public - html template
+ * /src - main directory
+    * /assets
+        * /fonts
+    * /components - react components
+        * /ContentModal - custom modal with common styles
+        * /LevelsModal - level selection modal
+        * /PegField - component with field of pegs and game logic
+    * /data/levels - game levels
+    * /pages
+        * /GamePage - main page
+    * types - type directory
+    * utils - helper functions
+
 ## Try it in telegram
 
 [@peg_game_bot](https://t.me/peg_game_bot)
