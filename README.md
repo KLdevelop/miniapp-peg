@@ -2,7 +2,7 @@
 
 ## Overview
 
-This webapp is a puzzle game called Peg Solitaire (https://en.wikipedia.org/wiki/Peg_solitaire).
+This Mini App is a puzzle game called Peg Solitaire (https://en.wikipedia.org/wiki/Peg_solitaire).
 You have several levels to choose from. The goal of each level is to leave a single peg in the center of the field. 
 The game is over when there is only one peg left, or when there are no more possible moves.
 
